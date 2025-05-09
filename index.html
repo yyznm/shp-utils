@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShpUtils</title>
+    <style>
+      *{
+        margin: 0;
+      }
+      #app{
+        width: 500px;
+        max-width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>geojson转shp</h1>
+      <textarea style="width: 100%; height: 200px;" id="textarea"></textarea>
+      <button onclick="onTest('Polygon')">面数据</button>
+      <button onclick="onTest('LineString')">线数据</button>
+      <button onclick="onTest('Point')">点数据</button>
+      <button onclick="onTest('all')">什么都有</button>
+      <button onclick="onTest('MultiPolygon')">多面数据</button>
+      <button onclick="onTest('allZ')">带Z值的数据</button><br>
+      <button id="generate" style="margin-top: 5px;padding-left: 20px;padding-right: 20px;">转换</button>
+
+
+      <h1 style="margin-top: 35px;margin-bottom: 5px;">shp转geojson</h1>
+      <input type="file" multiple id="input" />
+      <textarea style="width: 100%; height: 200px;" id="output"></textarea>
+    </div>
+    <script>
+      function onTest(type) {
+        const obj = {
+          Polygon: `{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"coordinates":[[[110.27870005341373,21.620185279498486],[110.28275766833366,21.620185279498486],[110.28275766833366,21.61761849402845],[110.27870005341373,21.61761849402845],[110.27870005341373,21.620185279498486]]],"type":"Polygon"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[[110.28506105123944,21.62017109848854],[110.2857627440448,21.618767171612717],[110.28623562397911,21.62017109848854],[110.28675426648675,21.620156917483712],[110.28527460991978,21.616668346420155],[110.2848169841763,21.616739253168262],[110.2854576602162,21.61837009893199],[110.28463393387864,21.620199460507024],[110.28506105123944,21.62017109848854]]],"type":"Polygon"},"properties":{}}]}`,
+          LineString: `{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"coordinates":[[110.27967407290862,21.62433955484329],[110.28303951468803,21.62437393486161],[110.27982200441477,21.621623507539795],[110.28287309174283,21.621657888204183]],"type":"LineString"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27751185231125,21.624001681525144],[110.28117315710301,21.626958340137023],[110.28472351326667,21.624190771967704]],"type":"LineString"},"properties":{}}]}`,
+          Point: `{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"coordinates":[110.27401966527088,21.61941061239004],"type":"Point"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[110.27337246492903,21.618551079947608],"type":"Point"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27481479711889,21.62030452069409],[110.27361285362741,21.620287330202032]],"type":"MultiPoint"},"properties":{}}]}`,
+          all: `{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"coordinates":[[[110.27870005341373,21.620185279498486],[110.28275766833366,21.620185279498486],[110.28275766833366,21.61761849402845],[110.27870005341373,21.61761849402845],[110.27870005341373,21.620185279498486]]],"type":"Polygon"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[[110.28506105123944,21.62017109848854],[110.2857627440448,21.618767171612717],[110.28623562397911,21.62017109848854],[110.28675426648675,21.620156917483712],[110.28527460991978,21.616668346420155],[110.2848169841763,21.616739253168262],[110.2854576602162,21.61837009893199],[110.28463393387864,21.620199460507024],[110.28506105123944,21.62017109848854]]],"type":"Polygon"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27967407290862,21.62433955484329],[110.28303951468803,21.62437393486161],[110.27982200441477,21.621623507539795],[110.28287309174283,21.621657888204183]],"type":"LineString"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27751185231125,21.624001681525144],[110.28117315710301,21.626958340137023],[110.28472351326667,21.624190771967704]],"type":"LineString"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[110.27401966527088,21.61941061239004],"type":"Point"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[110.27337246492903,21.618551079947608],"type":"Point"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27481479711889,21.62030452069409],[110.27361285362741,21.620287330202032]],"type":"MultiPoint"},"properties":{}}]}`,
+          allZ: `{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"coordinates":[[[110.27870005341373,21.620185279498486,1],[110.28275766833366,21.620185279498486,1],[110.28275766833366,21.61761849402845,1],[110.27870005341373,21.61761849402845,1],[110.27870005341373,21.620185279498486,1]]],"type":"Polygon"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[[110.28506105123944,21.62017109848854,1],[110.2857627440448,21.618767171612717,1],[110.28623562397911,21.62017109848854,1],[110.28675426648675,21.620156917483712,1],[110.28527460991978,21.616668346420155,1],[110.2848169841763,21.616739253168262,1],[110.2854576602162,21.61837009893199,1],[110.28463393387864,21.620199460507024,1],[110.28506105123944,21.62017109848854,1]]],"type":"Polygon"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27967407290862,21.62433955484329,1],[110.28303951468803,21.62437393486161,1],[110.27982200441477,21.621623507539795,1],[110.28287309174283,21.621657888204183,1]],"type":"LineString"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27751185231125,21.624001681525144,1],[110.28117315710301,21.626958340137023,1],[110.28472351326667,21.624190771967704,1]],"type":"LineString"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[110.27401966527088,21.61941061239004,1],"type":"Point"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[110.27337246492903,21.618551079947608,1],"type":"Point"},"properties":{}},{"type":"Feature","geometry":{"coordinates":[[110.27481479711889,21.62030452069409,1],[110.27361285362741,21.620287330202032,1]],"type":"MultiPoint"},"properties":{}}]}`,
+          MultiPolygon: `{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"coordinates":[[[[110.27870005341373,21.620185279498486],[110.28275766833366,21.620185279498486],[110.28275766833366,21.61761849402845],[110.27870005341373,21.61761849402845],[110.27870005341373,21.620185279498486]]],[[[110.28506105123944,21.62017109848854],[110.2857627440448,21.618767171612717],[110.28623562397911,21.62017109848854],[110.28675426648675,21.620156917483712],[110.28527460991978,21.616668346420155],[110.2848169841763,21.616739253168262],[110.2854576602162,21.61837009893199],[110.28463393387864,21.620199460507024],[110.28506105123944,21.62017109848854]]]],"type":"MultiPolygon"},"properties":{}}]}`,
+        }
+        textarea.value = JSON.stringify(JSON.parse(obj[type]), null, 2)
+      }
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
