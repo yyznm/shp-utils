@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [dts({
     include: ['./lib/**/*.ts', './lib/*.ts'],
     rollupTypes: true,
-    outDir: ".",
     clearPureImport: true,
+    outDir: 'dist',
   })],
   build: {
     lib: {
